@@ -1,5 +1,5 @@
 variables:
-- group: uibank-api
+- group: uibank
 
 jobs:
 - job:
