@@ -1,0 +1,22 @@
+variables:
+- group: uibank-api
+
+jobs:
+- job:
+  displayName: Build Docker Image, and push it to Container Registry
+  timeoutInMinutes: 360
+
+  pool:
+    vmImage: 'ubuntu-16.04'
+
+  steps:
+    - task: AzureCLI@2
+      displayName: Build and Push the Docker image
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript:  |
+          docker build -t $(containerRegistry).azurecr.io/$(repositoryName) $(Build.SourcesDirectory)/.
+          az acr login --name $(containerRegistry)
+          docker push $(containerRegistry).azurecr.io/$(repositoryName):latest
