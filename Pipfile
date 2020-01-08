@@ -8,6 +8,9 @@ pylint = "*"
 
 [packages]
 flask = "*"
+flask-dotenv = "*"
+connexion = {extras = ["swagger-ui"],version = "*"}
+python-dateutil = "*"
 
 [requires]
 python_version = "3.8"

@@ -1,6 +1,16 @@
-# Pull a pre-built alpine docker image with nginx and python3 installed
-FROM tiangolo/uwsgi-nginx-flask:python3.7
+FROM python:3.8-alpine
 
-# Copy the app contents to the image
-COPY ./app /app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
+COPY requirements.txt /usr/src/app/
+
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+COPY . /usr/src/app
+
+EXPOSE 80
+
+ENTRYPOINT ["python3"]
+
+CMD ["-m", "app"]
