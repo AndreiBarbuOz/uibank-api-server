@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
+from app.models.request_transaction import RequestTransaction  # noqa: E501
 from app.models.transaction import Transaction  # noqa: E501
 from app.test import BaseTestCase
 
@@ -17,7 +18,7 @@ class TestTransactionsController(BaseTestCase):
 
         Returns one transaction data
         """
-        body = None
+        body = RequestTransaction()
         response = self.client.open(
             '/AndreiBarbuOz/ui-bank/1.0.0/accounts/{accountId}/transactions'.format(account_id=789),
             method='POST',

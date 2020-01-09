@@ -6,6 +6,7 @@ from flask import json
 from six import BytesIO
 
 from app.models.account import Account  # noqa: E501
+from app.models.request_account import RequestAccount  # noqa: E501
 from app.test import BaseTestCase
 
 
@@ -17,7 +18,7 @@ class TestAccountsController(BaseTestCase):
 
         Creates an account
         """
-        body = None
+        body = RequestAccount()
         response = self.client.open(
             '/AndreiBarbuOz/ui-bank/1.0.0/customer/{customerId}/accounts'.format(customer_id=789),
             method='POST',

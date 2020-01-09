@@ -2,6 +2,7 @@ import connexion
 import six
 
 from app.models.account import Account  # noqa: E501
+from app.models.request_account import RequestAccount  # noqa: E501
 from app import util
 
 
@@ -18,7 +19,7 @@ def create_account(body, customer_id):  # noqa: E501
     :rtype: Account
     """
     if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+        body = RequestAccount.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 

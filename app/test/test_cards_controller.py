@@ -15,7 +15,7 @@ class TestCardsController(BaseTestCase):
     def test_add_bank_card(self):
         """Test case for add_bank_card
 
-        Return all bank cards for an account
+        Add a new bank card for an account
         """
         body = BankCard()
         response = self.client.open(

@@ -2,6 +2,7 @@ import connexion
 import six
 
 from app.models.customer import Customer  # noqa: E501
+from app.models.request_customer import RequestCustomer  # noqa: E501
 from app import util
 
 
@@ -16,7 +17,7 @@ def add_customer(body):  # noqa: E501
     :rtype: Customer
     """
     if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+        body = RequestCustomer.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
@@ -74,5 +75,5 @@ def update_customer(body, customer_id):  # noqa: E501
     :rtype: None
     """
     if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+        body = RequestCustomer.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'

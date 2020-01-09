@@ -6,6 +6,7 @@ from flask import json
 from six import BytesIO
 
 from app.models.auth import Auth  # noqa: E501
+from app.models.request_auth import RequestAuth  # noqa: E501
 from app.test import BaseTestCase
 
 
@@ -17,7 +18,7 @@ class TestAuthController(BaseTestCase):
 
         Authenticate endpoint
         """
-        body = None
+        body = RequestAuth()
         response = self.client.open(
             '/AndreiBarbuOz/ui-bank/1.0.0/auth',
             method='POST',

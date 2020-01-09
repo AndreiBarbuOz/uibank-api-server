@@ -6,6 +6,7 @@ from flask import json
 from six import BytesIO
 
 from app.models.customer import Customer  # noqa: E501
+from app.models.request_customer import RequestCustomer  # noqa: E501
 from app.test import BaseTestCase
 
 
@@ -17,7 +18,7 @@ class TestCustomersController(BaseTestCase):
 
         Add a new customer
         """
-        body = None
+        body = RequestCustomer()
         response = self.client.open(
             '/AndreiBarbuOz/ui-bank/1.0.0/customers',
             method='POST',
@@ -67,7 +68,7 @@ class TestCustomersController(BaseTestCase):
 
         Update an existing customer
         """
-        body = None
+        body = RequestCustomer()
         response = self.client.open(
             '/AndreiBarbuOz/ui-bank/1.0.0/customers/{customerId}'.format(customer_id=789),
             method='PUT',

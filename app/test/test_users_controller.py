@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
+from app.models.request_user import RequestUser  # noqa: E501
 from app.models.user import User  # noqa: E501
 from app.test import BaseTestCase
 
@@ -17,7 +18,7 @@ class TestUsersController(BaseTestCase):
 
         Add a new admin user
         """
-        body = None
+        body = RequestUser()
         response = self.client.open(
             '/AndreiBarbuOz/ui-bank/1.0.0/users',
             method='POST',

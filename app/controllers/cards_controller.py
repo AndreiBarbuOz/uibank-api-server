@@ -6,9 +6,9 @@ from app import util
 
 
 def add_bank_card(body, account_id):  # noqa: E501
-    """Return all bank cards for an account
+    """Add a new bank card for an account
 
-    Return all cards for the specified account # noqa: E501
+    Add a new card for the specified account # noqa: E501
 
     :param body: Bank card details
     :type body: dict | bytes
