@@ -5,12 +5,15 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
+flask-testing = "*"
+mockupdb = "*"
 
 [packages]
 flask = "*"
 flask-dotenv = "*"
 connexion = {extras = ["swagger-ui"],version = "*"}
 python-dateutil = "*"
+pymongo = "*"
 
 [requires]
 python_version = "3.8"
