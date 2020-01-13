@@ -43,7 +43,18 @@ def delete_customer(customer_id):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    try:
+        _id = ObjectId(customer_id)
+    except Exception:
+        return 'Not found', 404
+    cust = db['Customer'].find_one({"_id": _id})
+    if cust is None:
+        return 'Not found', 404
+    result = db['Customer'].delete_one({"_id": _id, "first_name": cust['first_name']})
+    if result.deleted_count:
+        return None, 200
+    else:
+        return "Not found", 404
 
 
 def get_customer_details(customer_id):  # noqa: E501

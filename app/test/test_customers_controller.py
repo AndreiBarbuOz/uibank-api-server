@@ -58,8 +58,16 @@ class TestCustomersController(BaseTestCase):
 
         Delete a single customer
         """
+        body = RequestCustomer.from_dict(cust)
         response = self.client.open(
-            '/customers/{customer_id}'.format(customer_id=789),
+            '/customers',
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        customer_id = response.json['id']
+        response = self.client.open(
+            '/customers/{customer_id}'.format(customer_id=customer_id),
             headers=headers,
             method='DELETE')
         self.assert200(response,
