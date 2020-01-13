@@ -70,8 +70,9 @@ class TestCustomersController(BaseTestCase):
 
         Get customer details
         """
+        customer_id = "5e1c2ddd5c79a0cb9880abbd"
         response = self.client.open(
-            '/customers/{customer_id}'.format(customer_id=789),
+            '/customers/{customer_id}'.format(customer_id=customer_id),
             headers=headers,
             method='GET')
         self.assert200(response,
@@ -82,8 +83,8 @@ class TestCustomersController(BaseTestCase):
 
         Search for Customers
         """
-        query_string = [('first_name', 'first_name_example'),
-                        ('last_name', 'last_name_example')]
+        query_string = [('first_name', 'John'),
+                        ('last_name', 'Doe')]
         response = self.client.open(
             '/customers/search',
             method='GET',

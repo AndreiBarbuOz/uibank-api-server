@@ -1,10 +1,12 @@
 import connexion
 import six
+from bson.objectid import ObjectId
 
 from app.models.customer import Customer  # noqa: E501
 from app.models.request_customer import RequestCustomer  # noqa: E501
 from app import util
-
+from app import db
+from datetime import date, datetime
 
 def add_customer(body):  # noqa: E501
     """Add a new customer
@@ -16,9 +18,19 @@ def add_customer(body):  # noqa: E501
 
     :rtype: Customer
     """
-    if connexion.request.is_json:
-        body = RequestCustomer.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    req = RequestCustomer.from_dict(body).to_dict()  # noqa: E501
+    req["email_verified"] = False
+    req['date_of_birth'] = datetime.combine(req['date_of_birth'], datetime.min.time())
+    if 'addresses' in req:
+        for crt_address in req['addresses']:
+            crt_address['date_end'] = datetime.combine(crt_address['date_end'], datetime.min.time())
+            crt_address['date_start'] = datetime.combine(crt_address['date_start'], datetime.min.time())
+
+    cust_id = db['Customer'].insert_one(req).inserted_id
+    req["id"] = str(cust_id)
+    del req["_id"]
+    return req
+
 
 
 def delete_customer(customer_id):  # noqa: E501
@@ -44,7 +56,25 @@ def get_customer_details(customer_id):  # noqa: E501
 
     :rtype: Customer
     """
-    return 'do some magic!'
+    try:
+        _id = ObjectId(customer_id)
+    except Exception:
+        return 'Not found', 404
+    cust = db['Customer'].find_one({"_id": _id})
+    if cust is None:
+        return 'Not found', 404
+
+    cust['date_of_birth'] = str(cust['date_of_birth'].date())
+    if 'addresses' in cust:
+        for crt_address in cust['addresses']:
+            crt_address['date_end'] = str(crt_address['date_end'].date())
+            crt_address['date_start'] = str(crt_address['date_start'].date())
+
+    ret = Customer.from_dict(cust).to_dict()
+    ret["id"] = str(cust["_id"])
+    ret["self_url"] = "/customers/{}".format(ret['id'])
+    ret['accounts_url'] = "/customers/{}/accounts".format(ret['id'])
+    return ret
 
 
 def search_customer(first_name=None, last_name=None):  # noqa: E501
@@ -59,7 +89,22 @@ def search_customer(first_name=None, last_name=None):  # noqa: E501
 
     :rtype: List[Customer]
     """
-    return 'do some magic!'
+    cust_list = db['Customer'].find({"first_name": first_name, "last_name": last_name})
+    if cust_list is None:
+        return 'Not found', 404
+    ret = []
+    for cust in cust_list:
+        cust['date_of_birth'] = str(cust['date_of_birth'].date())
+        if 'addresses' in cust:
+            for crt_address in cust['addresses']:
+                crt_address['date_end'] = str(crt_address['date_end'].date())
+                crt_address['date_start'] = str(crt_address['date_start'].date())
+        crt_cust = Customer.from_dict(cust).to_dict()
+        crt_cust["id"] = str(cust["_id"])
+        crt_cust["self_url"] = "/customers/{}".format(crt_cust['id'])
+        crt_cust['accounts_url'] = "/customers/{}/accounts".format(crt_cust['id'])
+        ret.append(crt_cust)
+    return ret
 
 
 def update_customer(body, customer_id):  # noqa: E501
