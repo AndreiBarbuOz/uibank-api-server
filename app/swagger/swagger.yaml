@@ -924,11 +924,14 @@ components:
         name_on_card: John Doe
     User:
       type: object
+      required:
+        - id
+        - username
+        - email
       properties:
         id:
-          type: integer
-          format: int64
-          example: 531157
+          type: string
+          example: 5e1c08d7116ec41f15ba94af
         username:
           pattern: '[a-zA-Z][a-zA-Z0-9_-]{6,50}'
           type: string
@@ -936,10 +939,6 @@ components:
         username_canonical:
           type: string
           example: siteadmin
-        plain_password:
-          type: string
-          format: password
-          example: fie8T3m0!fvA
         email:
           type: string
           format: email
@@ -952,8 +951,7 @@ components:
           example: /users/123456
       example:
         username_canonical: siteadmin
-        plain_password: fie8T3m0!fvA
-        id: 531157
+        id: 5e1c08d7116ec41f15ba94af
         email: Admin@UiBank.com
         self_url: /users/123456
         username: SiteAdmin

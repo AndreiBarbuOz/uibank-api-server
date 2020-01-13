@@ -11,9 +11,9 @@ from app.test import BaseTestCase, token
 
 
 test_user = {
-    "username": "admin123",
+    "username": "Admin123",
     "plain_password": "fie8T3m0!fvA",
-    "email": "admin@uibank.com",
+    "email": "Admin@UiBank.com",
     "first_name": "John",
     "last_name": "Admin"
     }
@@ -45,7 +45,7 @@ class TestUsersController(BaseTestCase):
 
         Returns user information
         """
-        user_id = "123456"
+        user_id = "5e1c164425011119e2faf939"
         response = self.client.open(
             '/users/{user_id}'.format(user_id=user_id),
             headers=headers,
