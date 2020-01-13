@@ -13,7 +13,7 @@ def add_bank_card(body, account_id):  # noqa: E501
     :param body: Bank card details
     :type body: dict | bytes
     :param account_id: Id of account
-    :type account_id: int
+    :type account_id: str
 
     :rtype: BankCard
     """
@@ -28,7 +28,7 @@ def get_card(card_id):  # noqa: E501
     Return all cards for the specified account # noqa: E501
 
     :param card_id: Id of the card
-    :type card_id: int
+    :type card_id: str
 
     :rtype: BankCard
     """
@@ -41,7 +41,7 @@ def list_bank_cards(account_id):  # noqa: E501
     Return all cards for the specified account # noqa: E501
 
     :param account_id: Id of account
-    :type account_id: int
+    :type account_id: str
 
     :rtype: List[BankCard]
     """

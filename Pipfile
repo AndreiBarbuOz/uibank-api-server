@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 pylint = "*"
 flask-testing = "*"
+autopep8 = "*"
 
 [packages]
 flask = "*"
@@ -13,6 +14,7 @@ flask-dotenv = "*"
 connexion = {extras = ["swagger-ui"],version = "*"}
 python-dateutil = "*"
 pymongo = "*"
+flask-pymongo = "*"
 
 [requires]
 python_version = "3.8"

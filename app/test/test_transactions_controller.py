@@ -7,8 +7,16 @@ from six import BytesIO
 
 from app.models.request_transaction import RequestTransaction  # noqa: E501
 from app.models.transaction import Transaction  # noqa: E501
-from app.test import BaseTestCase
+from app.test import BaseTestCase, token
 
+transact = {
+    "amount": 0,
+    "transaction_type": "debit",
+    "description": "return loan",
+    "account": "1001001234"
+}
+
+headers = {"Authorization" : "Bearer {0}".format(token)}
 
 class TestTransactionsController(BaseTestCase):
     """TransactionsController integration test stubs"""
@@ -18,11 +26,12 @@ class TestTransactionsController(BaseTestCase):
 
         Returns one transaction data
         """
-        body = RequestTransaction()
+        body = RequestTransaction.from_dict(transact)
         response = self.client.open(
-            '/AndreiBarbuOz/ui-bank/1.0.0/accounts/{accountId}/transactions'.format(account_id=789),
+            '/accounts/{account_id}/transactions'.format(account_id=789),
             method='POST',
             data=json.dumps(body),
+            headers=headers,
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -33,7 +42,9 @@ class TestTransactionsController(BaseTestCase):
         Returns one transaction data
         """
         response = self.client.open(
-            '/AndreiBarbuOz/ui-bank/1.0.0/transactions/{transactionId}'.format(transaction_id=789),
+            '/transactions/{transaction_id}'.format(
+                transaction_id='transaction_id_example'),
+            headers=headers,
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -44,7 +55,8 @@ class TestTransactionsController(BaseTestCase):
         Return all transactions for an account
         """
         response = self.client.open(
-            '/AndreiBarbuOz/ui-bank/1.0.0/accounts/{accountId}/transactions'.format(account_id=789),
+            '/accounts/{account_id}/transactions'.format(account_id=789),
+            headers=headers,
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

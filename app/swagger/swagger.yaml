@@ -13,8 +13,7 @@ externalDocs:
   description: Find out more about UiBank
   url: https://github.com/AndreiBarbuOz/uibank-api-server
 servers:
-- url: https://virtserver.swaggerhub.com/AndreiBarbuOz/ui-bank/1.0.0
-  description: SwaggerHub API Auto Mocking
+- url: /
 security:
 - bearerAuth: []
 tags:
@@ -59,7 +58,7 @@ paths:
         "401":
           description: Access token is missing or invalid
       x-openapi-router-controller: app.controllers.customers_controller
-  /customers/{customerId}:
+  /customers/{customer_id}:
     get:
       tags:
       - customers
@@ -67,15 +66,14 @@ paths:
       description: Retrieve the details of a customer
       operationId: get_customer_details
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
-        description: The customerId
+        description: The customer_id
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -94,15 +92,14 @@ paths:
       summary: Update an existing customer
       operationId: update_customer
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
-        description: The customerId
+        description: The customer_id
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       requestBody:
         description: Pet object that needs to be added to the store
         content:
@@ -124,18 +121,17 @@ paths:
       tags:
       - customers
       summary: Delete a single customer
-      description: Delete customer, based on customerId
+      description: Delete customer, based on customer_id
       operationId: delete_customer
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
         description: Customer to be deleted
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -183,7 +179,7 @@ paths:
         "401":
           description: Access token is missing or invalid
       x-openapi-router-controller: app.controllers.customers_controller
-  /customer/{customerId}/accounts:
+  /customer/{customer_id}/accounts:
     get:
       tags:
       - accounts
@@ -191,15 +187,14 @@ paths:
       description: Return a list of all accounts belonging to a customer
       operationId: list_accounts
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
         description: Owner of the accounts
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -221,7 +216,7 @@ paths:
       summary: Creates an account
       operationId: create_account
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
         description: Owner of the accounts
         required: true
@@ -251,23 +246,22 @@ paths:
         "404":
           description: Account not found
       x-openapi-router-controller: app.controllers.accounts_controller
-  /accounts/{accountId}:
+  /accounts/{account_id}:
     get:
       tags:
       - accounts
       summary: Get details for an account
-      description: Returns a single account, based on accountId
+      description: Returns a single account, based on account_id
       operationId: get_account
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -286,7 +280,7 @@ paths:
       summary: Deletes an account
       operationId: delete_account
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account to delete
         required: true
@@ -305,7 +299,7 @@ paths:
         "404":
           description: Account not found
       x-openapi-router-controller: app.controllers.accounts_controller
-  /accounts/{accountId}/transactions:
+  /accounts/{account_id}/transactions:
     get:
       tags:
       - transactions
@@ -313,15 +307,14 @@ paths:
       description: List all transactions belonging to an account
       operationId: list_transactions
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -344,15 +337,14 @@ paths:
       description: Returns one transaction data
       operationId: add_transaction
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       requestBody:
         content:
           application/json:
@@ -364,7 +356,7 @@ paths:
         "401":
           description: Access token is missing or invalid
       x-openapi-router-controller: app.controllers.transactions_controller
-  /accounts/{accountId}/cards:
+  /accounts/{account_id}/cards:
     get:
       tags:
       - cards
@@ -372,15 +364,14 @@ paths:
       description: Return all cards for the specified account
       operationId: list_bank_cards
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -403,15 +394,14 @@ paths:
       description: Add a new card for the specified account
       operationId: add_bank_card
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       requestBody:
         description: Bank card details
         content:
@@ -431,7 +421,7 @@ paths:
         "404":
           description: Not Found
       x-openapi-router-controller: app.controllers.cards_controller
-  /cards/{cardId}:
+  /cards/{card_id}:
     get:
       tags:
       - cards
@@ -439,15 +429,14 @@ paths:
       description: Return all cards for the specified account
       operationId: get_card
       parameters:
-      - name: cardId
+      - name: card_id
         in: path
         description: Id of the card
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -460,7 +449,7 @@ paths:
         "404":
           description: Not Found
       x-openapi-router-controller: app.controllers.cards_controller
-  /transactions/{transactionId}:
+  /transactions/{transaction_id}:
     get:
       tags:
       - transactions
@@ -468,15 +457,14 @@ paths:
       description: Returns one transaction data
       operationId: get_transaction
       parameters:
-      - name: transactionId
+      - name: transaction_id
         in: path
         description: Id of transaction
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: successful operation
@@ -512,7 +500,7 @@ paths:
         "401":
           description: Access token is missing or invalid
       x-openapi-router-controller: app.controllers.users_controller
-  /users/{userId}:
+  /users/{user_id}:
     get:
       tags:
       - users
@@ -520,15 +508,14 @@ paths:
       description: Returns information about one user
       operationId: get_user
       parameters:
-      - name: userId
+      - name: user_id
         in: path
         description: Id of user
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: successful operation
@@ -549,6 +536,7 @@ paths:
       description: Return a bearer token to authenticate and authorize subsequent
         calls for resources
       operationId: auth
+      security: []
       requestBody:
         description: Request body to perform authentication
         content:
