@@ -2,8 +2,9 @@ import connexion
 import six
 
 from app.models.account import Account  # noqa: E501
+from app.models.request_account import RequestAccount  # noqa: E501
 from app import util
-
+from app import db
 
 def create_account(body, customer_id):  # noqa: E501
     """Creates an account
@@ -18,7 +19,8 @@ def create_account(body, customer_id):  # noqa: E501
     :rtype: Account
     """
     if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+        body = RequestAccount.from_dict(connexion.request.get_json())  # noqa: E501
+    print(body)
     return 'do some magic!'
 
 
@@ -38,10 +40,10 @@ def delete_account(account_id):  # noqa: E501
 def get_account(account_id):  # noqa: E501
     """Get details for an account
 
-    Returns a single account, based on accountId # noqa: E501
+    Returns a single account, based on account_id # noqa: E501
 
     :param account_id: Id of account
-    :type account_id: int
+    :type account_id: str
 
     :rtype: Account
     """
@@ -54,7 +56,7 @@ def list_accounts(customer_id):  # noqa: E501
     Return a list of all accounts belonging to a customer # noqa: E501
 
     :param customer_id: Owner of the accounts
-    :type customer_id: int
+    :type customer_id: str
 
     :rtype: List[Account]
     """

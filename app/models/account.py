@@ -14,7 +14,7 @@ class Account(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, account_number: int=None, date_start: int=None, friendly_name: str=None, type: str=None, self_url: str=None, customer_url: str=None, cards_url: str=None, balance: float=None):  # noqa: E501
+    def __init__(self, id: int=None, account_number: int=None, date_start: int=None, friendly_name: str=None, account_type: str=None, self_url: str=None, customer_url: str=None, cards_url: str=None, balance: float=None):  # noqa: E501
         """Account - a model defined in Swagger
 
         :param id: The id of this Account.  # noqa: E501
@@ -25,8 +25,8 @@ class Account(Model):
         :type date_start: int
         :param friendly_name: The friendly_name of this Account.  # noqa: E501
         :type friendly_name: str
-        :param type: The type of this Account.  # noqa: E501
-        :type type: str
+        :param account_type: The account_type of this Account.  # noqa: E501
+        :type account_type: str
         :param self_url: The self_url of this Account.  # noqa: E501
         :type self_url: str
         :param customer_url: The customer_url of this Account.  # noqa: E501
@@ -41,7 +41,7 @@ class Account(Model):
             'account_number': int,
             'date_start': int,
             'friendly_name': str,
-            'type': str,
+            'account_type': str,
             'self_url': str,
             'customer_url': str,
             'cards_url': str,
@@ -53,7 +53,7 @@ class Account(Model):
             'account_number': 'account_number',
             'date_start': 'date_start',
             'friendly_name': 'friendly_name',
-            'type': 'type',
+            'account_type': 'account_type',
             'self_url': 'self_url',
             'customer_url': 'customer_url',
             'cards_url': 'cards_url',
@@ -63,7 +63,7 @@ class Account(Model):
         self._account_number = account_number
         self._date_start = date_start
         self._friendly_name = friendly_name
-        self._type = type
+        self._account_type = account_type
         self._self_url = self_url
         self._customer_url = customer_url
         self._cards_url = cards_url
@@ -165,31 +165,31 @@ class Account(Model):
         self._friendly_name = friendly_name
 
     @property
-    def type(self) -> str:
-        """Gets the type of this Account.
+    def account_type(self) -> str:
+        """Gets the account_type of this Account.
 
 
-        :return: The type of this Account.
+        :return: The account_type of this Account.
         :rtype: str
         """
-        return self._type
+        return self._account_type
 
-    @type.setter
-    def type(self, type: str):
-        """Sets the type of this Account.
+    @account_type.setter
+    def account_type(self, account_type: str):
+        """Sets the account_type of this Account.
 
 
-        :param type: The type of this Account.
-        :type type: str
+        :param account_type: The account_type of this Account.
+        :type account_type: str
         """
         allowed_values = ["checking", "savings"]  # noqa: E501
-        if type not in allowed_values:
+        if account_type not in allowed_values:
             raise ValueError(
-                "Invalid value for `type` ({0}), must be one of {1}"
-                .format(type, allowed_values)
+                "Invalid value for `account_type` ({0}), must be one of {1}"
+                .format(account_type, allowed_values)
             )
 
-        self._type = type
+        self._account_type = account_type
 
     @property
     def self_url(self) -> str:

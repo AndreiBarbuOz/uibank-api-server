@@ -6,7 +6,9 @@ from flask import json
 from six import BytesIO
 
 from app.models.bank_card import BankCard  # noqa: E501
-from app.test import BaseTestCase
+from app.test import BaseTestCase, token
+
+headers = {"Authorization": "Bearer {0}".format(token)}
 
 
 class TestCardsController(BaseTestCase):
@@ -15,12 +17,13 @@ class TestCardsController(BaseTestCase):
     def test_add_bank_card(self):
         """Test case for add_bank_card
 
-        Return all bank cards for an account
+        Add a new bank card for an account
         """
         body = BankCard()
         response = self.client.open(
-            '/AndreiBarbuOz/ui-bank/1.0.0/accounts/{accountId}/cards'.format(account_id=789),
+            '/accounts/{account_id}/cards'.format(account_id=789),
             method='POST',
+            headers=headers,
             data=json.dumps(body),
             content_type='application/json')
         self.assert200(response,
@@ -32,7 +35,8 @@ class TestCardsController(BaseTestCase):
         Return all bank cards for an account
         """
         response = self.client.open(
-            '/AndreiBarbuOz/ui-bank/1.0.0/cards/{cardId}'.format(card_id=789),
+            '/cards/{card_id}'.format(card_id=789),
+            headers=headers,
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -43,7 +47,8 @@ class TestCardsController(BaseTestCase):
         Return all bank cards for an account
         """
         response = self.client.open(
-            '/AndreiBarbuOz/ui-bank/1.0.0/accounts/{accountId}/cards'.format(account_id=789),
+            '/accounts/{account_id}/cards'.format(account_id=789),
+            headers=headers,
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

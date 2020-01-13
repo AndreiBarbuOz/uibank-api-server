@@ -13,7 +13,7 @@ externalDocs:
   description: Find out more about UiBank
   url: https://github.com/AndreiBarbuOz/uibank-api-server
 servers:
-- url: http://localhost
+- url: /
 security:
 - bearerAuth: []
 tags:
@@ -40,7 +40,12 @@ paths:
       summary: Add a new customer
       operationId: add_customer
       requestBody:
-        $ref: '#/components/requestBodies/Customer'
+        description: Pet object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCustomer'
+        required: true
       responses:
         "201":
           description: Created
@@ -53,7 +58,7 @@ paths:
         "401":
           description: Access token is missing or invalid
       x-openapi-router-controller: app.controllers.customers_controller
-  /customers/{customerId}:
+  /customers/{customer_id}:
     get:
       tags:
       - customers
@@ -61,15 +66,14 @@ paths:
       description: Retrieve the details of a customer
       operationId: get_customer_details
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
-        description: The customerId
+        description: The customer_id
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -88,17 +92,21 @@ paths:
       summary: Update an existing customer
       operationId: update_customer
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
-        description: The customerId
+        description: The customer_id
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       requestBody:
-        $ref: '#/components/requestBodies/Customer'
+        description: Pet object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCustomer'
+        required: true
       responses:
         "201":
           description: Updated
@@ -113,18 +121,17 @@ paths:
       tags:
       - customers
       summary: Delete a single customer
-      description: Delete customer, based on customerId
+      description: Delete customer, based on customer_id
       operationId: delete_customer
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
         description: Customer to be deleted
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -172,7 +179,7 @@ paths:
         "401":
           description: Access token is missing or invalid
       x-openapi-router-controller: app.controllers.customers_controller
-  /customer/{customerId}/accounts:
+  /customer/{customer_id}/accounts:
     get:
       tags:
       - accounts
@@ -180,15 +187,14 @@ paths:
       description: Return a list of all accounts belonging to a customer
       operationId: list_accounts
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
         description: Owner of the accounts
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -210,7 +216,7 @@ paths:
       summary: Creates an account
       operationId: create_account
       parameters:
-      - name: customerId
+      - name: customer_id
         in: path
         description: Owner of the accounts
         required: true
@@ -220,7 +226,12 @@ paths:
           type: integer
           format: int64
       requestBody:
-        $ref: '#/components/requestBodies/Account'
+        description: List of user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAccount'
+        required: true
       responses:
         "201":
           description: Created
@@ -235,23 +246,22 @@ paths:
         "404":
           description: Account not found
       x-openapi-router-controller: app.controllers.accounts_controller
-  /accounts/{accountId}:
+  /accounts/{account_id}:
     get:
       tags:
       - accounts
       summary: Get details for an account
-      description: Returns a single account, based on accountId
+      description: Returns a single account, based on account_id
       operationId: get_account
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -270,7 +280,7 @@ paths:
       summary: Deletes an account
       operationId: delete_account
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account to delete
         required: true
@@ -289,7 +299,7 @@ paths:
         "404":
           description: Account not found
       x-openapi-router-controller: app.controllers.accounts_controller
-  /accounts/{accountId}/transactions:
+  /accounts/{account_id}/transactions:
     get:
       tags:
       - transactions
@@ -297,15 +307,14 @@ paths:
       description: List all transactions belonging to an account
       operationId: list_transactions
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -328,24 +337,26 @@ paths:
       description: Returns one transaction data
       operationId: add_transaction
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       requestBody:
-        $ref: '#/components/requestBodies/Transaction'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestTransaction'
       responses:
         "201":
           description: Created
         "401":
           description: Access token is missing or invalid
       x-openapi-router-controller: app.controllers.transactions_controller
-  /accounts/{accountId}/cards:
+  /accounts/{account_id}/cards:
     get:
       tags:
       - cards
@@ -353,15 +364,14 @@ paths:
       description: Return all cards for the specified account
       operationId: list_bank_cards
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -380,21 +390,25 @@ paths:
     post:
       tags:
       - cards
-      summary: Return all bank cards for an account
-      description: Return all cards for the specified account
+      summary: Add a new bank card for an account
+      description: Add a new card for the specified account
       operationId: add_bank_card
       parameters:
-      - name: accountId
+      - name: account_id
         in: path
         description: Id of account
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       requestBody:
-        $ref: '#/components/requestBodies/BankCard'
+        description: Bank card details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankCard'
+        required: true
       responses:
         "200":
           description: OK
@@ -407,7 +421,7 @@ paths:
         "404":
           description: Not Found
       x-openapi-router-controller: app.controllers.cards_controller
-  /cards/{cardId}:
+  /cards/{card_id}:
     get:
       tags:
       - cards
@@ -415,15 +429,14 @@ paths:
       description: Return all cards for the specified account
       operationId: get_card
       parameters:
-      - name: cardId
+      - name: card_id
         in: path
         description: Id of the card
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: OK
@@ -436,7 +449,7 @@ paths:
         "404":
           description: Not Found
       x-openapi-router-controller: app.controllers.cards_controller
-  /transactions/{transactionId}:
+  /transactions/{transaction_id}:
     get:
       tags:
       - transactions
@@ -444,15 +457,14 @@ paths:
       description: Returns one transaction data
       operationId: get_transaction
       parameters:
-      - name: transactionId
+      - name: transaction_id
         in: path
         description: Id of transaction
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: successful operation
@@ -470,7 +482,12 @@ paths:
       summary: Add a new admin user
       operationId: add_user
       requestBody:
-        $ref: '#/components/requestBodies/User'
+        description: User data to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUser'
+        required: true
       responses:
         "201":
           description: Created
@@ -483,7 +500,7 @@ paths:
         "401":
           description: Access token is missing or invalid
       x-openapi-router-controller: app.controllers.users_controller
-  /users/{userId}:
+  /users/{user_id}:
     get:
       tags:
       - users
@@ -491,15 +508,14 @@ paths:
       description: Returns information about one user
       operationId: get_user
       parameters:
-      - name: userId
+      - name: user_id
         in: path
         description: Id of user
         required: true
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: successful operation
@@ -520,8 +536,14 @@ paths:
       description: Return a bearer token to authenticate and authorize subsequent
         calls for resources
       operationId: auth
+      security: []
       requestBody:
-        $ref: '#/components/requestBodies/Auth'
+        description: Request body to perform authentication
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAuth'
+        required: true
       responses:
         "200":
           description: Success
@@ -622,6 +644,67 @@ components:
         employment_status: permanent
         first_name: John
         email: john.doe@uibank.com
+    RequestCustomer:
+      required:
+      - date_of_birth
+      - email
+      - employment_status
+      - first_name
+      - gender
+      - last_name
+      - plain_password
+      - title
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        middle_name:
+          type: string
+        title:
+          type: string
+          description: Title of customer
+          example: mr
+          enum:
+          - mr
+          - mrs
+          - miss
+          - ms
+          - doc
+        gender:
+          type: string
+          description: Gender of customer
+          enum:
+          - male
+          - female
+        email:
+          type: string
+          format: email
+          example: john.doe@uibank.com
+        date_of_birth:
+          type: string
+          format: date
+        employment_status:
+          type: string
+          enum:
+          - permanent
+          - unemployed
+          - consultant
+        residence_status:
+          type: string
+          enum:
+          - resident
+          - foreigner
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        plain_password:
+          type: string
+          format: password
     Account:
       type: object
       properties:
@@ -637,7 +720,7 @@ components:
         friendly_name:
           type: string
           example: Debit account
-        type:
+        account_type:
           type: string
           enum:
           - checking
@@ -659,11 +742,29 @@ components:
         customer_url: /customers/654321
         date_start: 1
         friendly_name: Debit account
+        account_type: checking
         balance: 5.962134
         cards_url: /accounts/12345/cards
         id: 0
-        type: checking
         self_url: /accounts/12345
+    RequestAccount:
+      required:
+      - account_type
+      - date_start
+      - friendly_name
+      type: object
+      properties:
+        date_start:
+          type: integer
+          format: date
+        friendly_name:
+          type: string
+          example: Debit account
+        account_type:
+          type: string
+          enum:
+          - checking
+          - savings
     Transaction:
       required:
       - account_url
@@ -725,6 +826,29 @@ components:
         id: 0
         transaction_type: debit
         self_url: /transactions/12345
+    RequestTransaction:
+      required:
+      - account
+      - amount
+      - description
+      - transaction_type
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+        transaction_type:
+          type: string
+          description: Transaction type
+          enum:
+          - debit
+          - credit
+        description:
+          type: string
+          example: return loan
+        account:
+          type: string
+          example: "1001001234"
     Address:
       type: object
       properties:
@@ -834,6 +958,31 @@ components:
         self_url: /users/123456
         username: SiteAdmin
         email_canonical: admin@uibank.com
+    RequestUser:
+      required:
+      - email
+      - plain_password
+      - username
+      type: object
+      properties:
+        username:
+          pattern: '[a-zA-Z][a-zA-Z0-9_-]{6,50}'
+          type: string
+          example: admin
+        plain_password:
+          type: string
+          format: password
+          example: fie8T3m0!fvA
+        email:
+          type: string
+          format: email
+          example: admin@uibank.com
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Admin
     Auth:
       type: object
       properties:
@@ -848,173 +997,23 @@ components:
         access_token: access_token
         token_type: token_type
         expires_in: 0
+    RequestAuth:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          pattern: '[a-zA-Z][a-zA-Z0-9_-]{6,50}'
+          type: string
+          example: admin
+        password:
+          type: string
+          format: password
+          example: fie8T3m0!fvA
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
-  requestBodies:
-    Customer:
-      description: Pet object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            required:
-            - date_of_birth
-            - email
-            - employment_status
-            - first_name
-            - gender
-            - last_name
-            - password
-            - title
-            type: object
-            properties:
-              first_name:
-                type: string
-                example: John
-              last_name:
-                type: string
-                example: Doe
-              middle_name:
-                type: string
-              title:
-                type: string
-                description: Title of customer
-                example: mr
-                enum:
-                - mr
-                - mrs
-                - miss
-                - ms
-                - doc
-              gender:
-                type: string
-                description: Gender of customer
-                enum:
-                - male
-                - female
-              email:
-                type: string
-                format: email
-                example: john.doe@uibank.com
-              date_of_birth:
-                type: string
-                format: date
-              employment_status:
-                type: string
-                enum:
-                - permanent
-                - unemployed
-                - consultant
-              residence_status:
-                type: string
-                enum:
-                - resident
-                - foreigner
-              addresses:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Address'
-              plain_password:
-                type: string
-                format: password
-      required: true
-    Account:
-      description: List of user object
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              date_start:
-                type: integer
-                format: date
-              friendly_name:
-                type: string
-                example: Debit account
-              type:
-                type: string
-                enum:
-                - checking
-                - savings
-      required: true
-    BankCard:
-      description: Bank card details
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BankCard'
-      required: true
-    Transaction:
-      content:
-        application/json:
-          schema:
-            required:
-            - account
-            - amount
-            - description
-            - transaction_type
-            type: object
-            properties:
-              amount:
-                type: number
-                format: float
-              transaction_type:
-                type: string
-                description: Transaction type
-                enum:
-                - debit
-                - credit
-              description:
-                type: string
-                example: return loan
-              account:
-                type: string
-                example: "1001001234"
-    User:
-      content:
-        application/json:
-          schema:
-            required:
-            - email
-            - plain_password
-            - username
-            type: object
-            properties:
-              username:
-                pattern: '[a-zA-Z][a-zA-Z0-9_-]{6,50}'
-                type: string
-                example: admin
-              plain_password:
-                type: string
-                format: password
-                example: fie8T3m0!fvA
-              email:
-                type: string
-                format: email
-                example: admin@uibank.com
-              first_name:
-                type: string
-                example: John
-              last_name:
-                type: string
-                example: Admin
-    Auth:
-      content:
-        application/json:
-          schema:
-            required:
-            - password
-            - username
-            type: object
-            properties:
-              username:
-                pattern: '[a-zA-Z][a-zA-Z0-9_-]{6,50}'
-                type: string
-                example: admin
-              password:
-                type: string
-                format: password
-                example: fie8T3m0!fvA
   securitySchemes:
     bearerAuth:
       type: http

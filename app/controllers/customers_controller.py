@@ -2,6 +2,7 @@ import connexion
 import six
 
 from app.models.customer import Customer  # noqa: E501
+from app.models.request_customer import RequestCustomer  # noqa: E501
 from app import util
 
 
@@ -16,17 +17,17 @@ def add_customer(body):  # noqa: E501
     :rtype: Customer
     """
     if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+        body = RequestCustomer.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
 def delete_customer(customer_id):  # noqa: E501
     """Delete a single customer
 
-    Delete customer, based on customerId # noqa: E501
+    Delete customer, based on customer_id # noqa: E501
 
     :param customer_id: Customer to be deleted
-    :type customer_id: int
+    :type customer_id: str
 
     :rtype: None
     """
@@ -38,8 +39,8 @@ def get_customer_details(customer_id):  # noqa: E501
 
     Retrieve the details of a customer # noqa: E501
 
-    :param customer_id: The customerId
-    :type customer_id: int
+    :param customer_id: The customer_id
+    :type customer_id: str
 
     :rtype: Customer
     """
@@ -68,11 +69,11 @@ def update_customer(body, customer_id):  # noqa: E501
 
     :param body: Pet object that needs to be added to the store
     :type body: dict | bytes
-    :param customer_id: The customerId
-    :type customer_id: int
+    :param customer_id: The customer_id
+    :type customer_id: str
 
     :rtype: None
     """
     if connexion.request.is_json:
-        body = object.from_dict(connexion.request.get_json())  # noqa: E501
+        body = RequestCustomer.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
