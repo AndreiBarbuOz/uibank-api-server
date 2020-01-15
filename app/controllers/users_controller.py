@@ -20,8 +20,6 @@ def add_user(body):  # noqa: E501
     req = RequestUser.from_dict(body).to_dict()  # noqa: E501
     req["email_canonical"] = req["email"].lower()
     req["username_canonical"] = req["username"].lower()
-
-    print(req)
     user_id = db['User'].insert_one(req).inserted_id
     req["id"] = str(user_id)
     del req["_id"]
@@ -38,7 +36,11 @@ def get_user(user_id):  # noqa: E501
 
     :rtype: User
     """
-    user = db['User'].find_one({"_id":ObjectId(user_id)})
+    try:
+        _id = ObjectId(user_id)
+    except Exception:
+        return 'Not found', 404
+    user = db['User'].find_one({"_id": _id})
     if user is None:
         return 'Not found', 404
     ret = User.from_dict(user).to_dict()

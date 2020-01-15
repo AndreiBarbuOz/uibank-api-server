@@ -15,17 +15,15 @@ class User(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, username: str=None, username_canonical: str=None, plain_password: str=None, email: str=None, email_canonical: str=None, self_url: str=None):  # noqa: E501
+    def __init__(self, id: str=None, username: str=None, username_canonical: str=None, email: str=None, email_canonical: str=None, self_url: str=None):  # noqa: E501
         """User - a model defined in Swagger
 
         :param id: The id of this User.  # noqa: E501
-        :type id: int
+        :type id: str
         :param username: The username of this User.  # noqa: E501
         :type username: str
         :param username_canonical: The username_canonical of this User.  # noqa: E501
         :type username_canonical: str
-        :param plain_password: The plain_password of this User.  # noqa: E501
-        :type plain_password: str
         :param email: The email of this User.  # noqa: E501
         :type email: str
         :param email_canonical: The email_canonical of this User.  # noqa: E501
@@ -34,10 +32,9 @@ class User(Model):
         :type self_url: str
         """
         self.swagger_types = {
-            'id': int,
+            'id': str,
             'username': str,
             'username_canonical': str,
-            'plain_password': str,
             'email': str,
             'email_canonical': str,
             'self_url': str
@@ -47,7 +44,6 @@ class User(Model):
             'id': 'id',
             'username': 'username',
             'username_canonical': 'username_canonical',
-            'plain_password': 'plain_password',
             'email': 'email',
             'email_canonical': 'email_canonical',
             'self_url': 'self_url'
@@ -55,7 +51,6 @@ class User(Model):
         self._id = id
         self._username = username
         self._username_canonical = username_canonical
-        self._plain_password = plain_password
         self._email = email
         self._email_canonical = email_canonical
         self._self_url = self_url
@@ -72,23 +67,25 @@ class User(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
+    def id(self) -> str:
         """Gets the id of this User.
 
 
         :return: The id of this User.
-        :rtype: int
+        :rtype: str
         """
         return self._id
 
     @id.setter
-    def id(self, id: int):
+    def id(self, id: str):
         """Sets the id of this User.
 
 
         :param id: The id of this User.
-        :type id: int
+        :type id: str
         """
+        if id is None:
+            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
         self._id = id
 
@@ -110,6 +107,8 @@ class User(Model):
         :param username: The username of this User.
         :type username: str
         """
+        if username is None:
+            raise ValueError("Invalid value for `username`, must not be `None`")  # noqa: E501
 
         self._username = username
 
@@ -135,27 +134,6 @@ class User(Model):
         self._username_canonical = username_canonical
 
     @property
-    def plain_password(self) -> str:
-        """Gets the plain_password of this User.
-
-
-        :return: The plain_password of this User.
-        :rtype: str
-        """
-        return self._plain_password
-
-    @plain_password.setter
-    def plain_password(self, plain_password: str):
-        """Sets the plain_password of this User.
-
-
-        :param plain_password: The plain_password of this User.
-        :type plain_password: str
-        """
-
-        self._plain_password = plain_password
-
-    @property
     def email(self) -> str:
         """Gets the email of this User.
 
@@ -173,6 +151,8 @@ class User(Model):
         :param email: The email of this User.
         :type email: str
         """
+        if email is None:
+            raise ValueError("Invalid value for `email`, must not be `None`")  # noqa: E501
 
         self._email = email
 

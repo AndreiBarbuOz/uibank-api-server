@@ -14,15 +14,15 @@ class Account(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, account_number: int=None, date_start: int=None, friendly_name: str=None, account_type: str=None, self_url: str=None, customer_url: str=None, cards_url: str=None, balance: float=None):  # noqa: E501
+    def __init__(self, id: str=None, account_number: int=None, date_start: date=None, friendly_name: str=None, account_type: str=None, self_url: str=None, customer_url: str=None, cards_url: str=None, balance: float=None):  # noqa: E501
         """Account - a model defined in Swagger
 
         :param id: The id of this Account.  # noqa: E501
-        :type id: int
+        :type id: str
         :param account_number: The account_number of this Account.  # noqa: E501
         :type account_number: int
         :param date_start: The date_start of this Account.  # noqa: E501
-        :type date_start: int
+        :type date_start: date
         :param friendly_name: The friendly_name of this Account.  # noqa: E501
         :type friendly_name: str
         :param account_type: The account_type of this Account.  # noqa: E501
@@ -37,9 +37,9 @@ class Account(Model):
         :type balance: float
         """
         self.swagger_types = {
-            'id': int,
+            'id': str,
             'account_number': int,
-            'date_start': int,
+            'date_start': date,
             'friendly_name': str,
             'account_type': str,
             'self_url': str,
@@ -81,22 +81,22 @@ class Account(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
+    def id(self) -> str:
         """Gets the id of this Account.
 
 
         :return: The id of this Account.
-        :rtype: int
+        :rtype: str
         """
         return self._id
 
     @id.setter
-    def id(self, id: int):
+    def id(self, id: str):
         """Sets the id of this Account.
 
 
         :param id: The id of this Account.
-        :type id: int
+        :type id: str
         """
 
         self._id = id
@@ -123,22 +123,22 @@ class Account(Model):
         self._account_number = account_number
 
     @property
-    def date_start(self) -> int:
+    def date_start(self) -> date:
         """Gets the date_start of this Account.
 
 
         :return: The date_start of this Account.
-        :rtype: int
+        :rtype: date
         """
         return self._date_start
 
     @date_start.setter
-    def date_start(self, date_start: int):
+    def date_start(self, date_start: date):
         """Sets the date_start of this Account.
 
 
         :param date_start: The date_start of this Account.
-        :type date_start: int
+        :type date_start: date
         """
 
         self._date_start = date_start

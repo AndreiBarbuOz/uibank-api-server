@@ -2,6 +2,8 @@ from connexion.apps.flask_app import FlaskJSONEncoder
 import six
 
 from app.models.base_model_ import Model
+from bson.objectid import ObjectId
+
 
 
 class JSONEncoder(FlaskJSONEncoder):
@@ -17,4 +19,6 @@ class JSONEncoder(FlaskJSONEncoder):
                 attr = o.attribute_map[attr]
                 dikt[attr] = value
             return dikt
+        elif isinstance(o, ObjectId):
+            return str(o)
         return FlaskJSONEncoder.default(self, o)

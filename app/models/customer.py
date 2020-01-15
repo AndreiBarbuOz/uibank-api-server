@@ -15,11 +15,11 @@ class Customer(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, first_name: str=None, last_name: str=None, middle_name: str=None, title: str=None, gender: str=None, email_verified: bool=False, email: str=None, date_of_birth: date=None, employment_status: str=None, residence_status: str=None, addresses: List[Address]=None, accounts_url: str=None, self_url: str=None):  # noqa: E501
+    def __init__(self, id: str=None, first_name: str=None, last_name: str=None, middle_name: str=None, title: str=None, gender: str=None, email_verified: bool=False, email: str=None, date_of_birth: date=None, employment_status: str=None, residence_status: str=None, addresses: List[Address]=None, accounts_url: str=None, self_url: str=None):  # noqa: E501
         """Customer - a model defined in Swagger
 
         :param id: The id of this Customer.  # noqa: E501
-        :type id: int
+        :type id: str
         :param first_name: The first_name of this Customer.  # noqa: E501
         :type first_name: str
         :param last_name: The last_name of this Customer.  # noqa: E501
@@ -48,7 +48,7 @@ class Customer(Model):
         :type self_url: str
         """
         self.swagger_types = {
-            'id': int,
+            'id': str,
             'first_name': str,
             'last_name': str,
             'middle_name': str,
@@ -107,22 +107,22 @@ class Customer(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
+    def id(self) -> str:
         """Gets the id of this Customer.
 
 
         :return: The id of this Customer.
-        :rtype: int
+        :rtype: str
         """
         return self._id
 
     @id.setter
-    def id(self, id: int):
+    def id(self, id: str):
         """Sets the id of this Customer.
 
 
         :param id: The id of this Customer.
-        :type id: int
+        :type id: str
         """
 
         self._id = id
