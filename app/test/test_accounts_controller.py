@@ -12,13 +12,13 @@ from app.test import BaseTestCase, token
 
 headers = {"Authorization": "Bearer {0}".format(token)}
 
-account = {
+test_account = {
     "date_start": "2020-01-13",
     "friendly_name": "Debit account",
     "account_type": "checking"
 }
 
-cust = {
+test_cust = {
     "first_name": "John",
     "last_name": "Doe",
     "middle_name": "string",
@@ -42,12 +42,18 @@ cust = {
     "plain_password": "string"
 }
 
+
 class TestAccountsController(BaseTestCase):
     """AccountsController integration test stubs"""
 
+    def compare_response(self, account_request, account):
+        for k, v in account_request.items():
+            if not k in ['addresses', 'plain_password']:
+                self.assertIn(k, account)
+                self.assertEqual(v, account[k])
+
     def setUp(self):
-        print("setup")
-        body = RequestCustomer.from_dict(cust)
+        body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
             '/customers',
             method='POST',
@@ -57,7 +63,6 @@ class TestAccountsController(BaseTestCase):
         self.customer_id = response.json['id']
 
     def tearDown(self):
-        print("teardown")
         self.client.open(
             '/customers/{customer_id}'.format(customer_id=self.customer_id),
             headers=headers,
@@ -68,15 +73,17 @@ class TestAccountsController(BaseTestCase):
 
         Creates an account
         """
-        body = RequestAccount.from_dict(account)
+        body = RequestAccount.from_dict(test_account)
         response = self.client.open(
-            '/customer/{customer_id}/accounts'.format(customer_id=self.customer_id),
+            '/customer/{customer_id}/accounts'.format(
+                customer_id=self.customer_id),
             method='POST',
             data=json.dumps(body),
             headers=headers,
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        self.compare_response(test_account, response.json)
 
     def test_delete_account(self):
         """Test case for delete_account
@@ -95,9 +102,10 @@ class TestAccountsController(BaseTestCase):
 
         Get details for an account
         """
-        body = RequestAccount.from_dict(account)
+        body = RequestAccount.from_dict(test_account)
         response = self.client.open(
-            '/customer/{customer_id}/accounts'.format(customer_id=self.customer_id),
+            '/customer/{customer_id}/accounts'.format(
+                customer_id=self.customer_id),
             method='POST',
             data=json.dumps(body),
             headers=headers,
@@ -109,18 +117,74 @@ class TestAccountsController(BaseTestCase):
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        self.compare_response(test_account, response.json)
 
     def test_list_accounts(self):
         """Test case for list_accounts
 
         List all customer accounts
         """
+        body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
-            '/customer/{customer_id}/accounts'.format(customer_id=self.customer_id),
+            '/customers',
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        cust_id = response.json['id']
+
+        response = self.client.open(
+            '/customer/{customer_id}/accounts'.format(
+                customer_id=cust_id),
             headers=headers,
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        self.assertEqual(response.json, [])
+
+        body = RequestAccount.from_dict(test_account)
+        response = self.client.open(
+            '/customer/{customer_id}/accounts'.format(
+                customer_id=cust_id),
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+        response = self.client.open(
+            '/customer/{customer_id}/accounts'.format(
+                customer_id=cust_id),
+            headers=headers,
+            method='GET')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assertEqual(len(response.json), 1)
+        self.compare_response(test_account, response.json[0])
+
+        body = RequestAccount.from_dict(test_account)
+        response = self.client.open(
+            '/customer/{customer_id}/accounts'.format(
+                customer_id=cust_id),
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+        response = self.client.open(
+            '/customer/{customer_id}/accounts'.format(
+                customer_id=cust_id),
+            headers=headers,
+            method='GET')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assertEqual(len(response.json), 2)
+        self.compare_response(test_account, response.json[0])
+        self.compare_response(test_account, response.json[1])
+
 
 
 if __name__ == '__main__':

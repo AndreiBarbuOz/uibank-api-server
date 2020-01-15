@@ -33,10 +33,33 @@ cust = {
     "plain_password": "string"
 }
 
-headers = {"Authorization" : "Bearer {0}".format(token)}
+headers = {"Authorization": "Bearer {0}".format(token)}
+
 
 class TestCustomersController(BaseTestCase):
     """CustomersController integration test stubs"""
+
+    def compare_response(self, customer_request, customer):
+        for k, v in customer_request.items():
+            if not k in ['addresses', 'plain_password']:
+                self.assertIn(k, customer)
+                self.assertEqual(v, customer[k])
+
+    def setUp(self):
+        body = RequestCustomer.from_dict(cust)
+        response = self.client.open(
+            '/customers',
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        self.customer_id = response.json['id']
+
+    def tearDown(self):
+        self.client.open(
+            '/customers/{customer_id}'.format(customer_id=self.customer_id),
+            headers=headers,
+            method='DELETE')
 
     def test_add_customer(self):
         """Test case for add_customer
@@ -52,6 +75,7 @@ class TestCustomersController(BaseTestCase):
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        self.compare_response(cust, response.json)
 
     def test_delete_customer(self):
         """Test case for delete_customer
@@ -65,9 +89,9 @@ class TestCustomersController(BaseTestCase):
             data=json.dumps(body),
             headers=headers,
             content_type='application/json')
-        customer_id = response.json['id']
+        cust_id = response.json['id']
         response = self.client.open(
-            '/customers/{customer_id}'.format(customer_id=customer_id),
+            '/customers/{customer_id}'.format(customer_id=cust_id),
             headers=headers,
             method='DELETE')
         self.assert200(response,
@@ -78,20 +102,13 @@ class TestCustomersController(BaseTestCase):
 
         Get customer details
         """
-        body = RequestCustomer.from_dict(cust)
         response = self.client.open(
-            '/customers',
-            method='POST',
-            data=json.dumps(body),
-            headers=headers,
-            content_type='application/json')
-        customer_id = response.json['id']
-        response = self.client.open(
-            '/customers/{customer_id}'.format(customer_id=customer_id),
+            '/customers/{customer_id}'.format(customer_id=self.customer_id),
             headers=headers,
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        self.compare_response(cust, response.json)
 
     def test_search_customer(self):
         """Test case for search_customer

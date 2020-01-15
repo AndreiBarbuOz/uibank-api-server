@@ -29,8 +29,6 @@ class TestUsersController(BaseTestCase):
         Add a new admin user
         """
         body = RequestUser.from_dict(test_user)
-        print(headers)
-        print(json.dumps(body))
         response = self.client.open(
             '/users',
             method='POST',
