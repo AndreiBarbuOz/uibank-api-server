@@ -8,6 +8,23 @@ from app import util
 from app import db
 from datetime import date, datetime
 
+
+def decorate_customer(customer): 
+    customer['date_of_birth'] = str(customer['date_of_birth'].date())
+
+    if 'addresses' in customer:
+        for crt_address in customer['addresses']:
+            crt_address['date_end'] = str(crt_address['date_end'].date())
+            crt_address['date_start'] = str(crt_address['date_start'].date())
+
+    ret = Customer.from_dict(customer).to_dict()
+    ret["id"] = str(customer["_id"])
+    ret["self_url"] = "/customers/{}".format(ret['id'])
+    ret['accounts_url'] = "/customers/{}/accounts".format(ret['id'])
+
+    return ret
+
+
 def add_customer(body):  # noqa: E501
     """Add a new customer
 
@@ -26,11 +43,8 @@ def add_customer(body):  # noqa: E501
             crt_address['date_end'] = datetime.combine(crt_address['date_end'], datetime.min.time())
             crt_address['date_start'] = datetime.combine(crt_address['date_start'], datetime.min.time())
 
-    cust_id = db['Customer'].insert_one(req).inserted_id
-    req["id"] = str(cust_id)
-    del req["_id"]
-    return req
-
+    db['Customer'].insert_one(req).inserted_id
+    return decorate_customer(req)
 
 
 def delete_customer(customer_id):  # noqa: E501
@@ -75,17 +89,7 @@ def get_customer_details(customer_id):  # noqa: E501
     if cust is None:
         return 'Not found', 404
 
-    cust['date_of_birth'] = str(cust['date_of_birth'].date())
-    if 'addresses' in cust:
-        for crt_address in cust['addresses']:
-            crt_address['date_end'] = str(crt_address['date_end'].date())
-            crt_address['date_start'] = str(crt_address['date_start'].date())
-
-    ret = Customer.from_dict(cust).to_dict()
-    ret["id"] = str(cust["_id"])
-    ret["self_url"] = "/customers/{}".format(ret['id'])
-    ret['accounts_url'] = "/customers/{}/accounts".format(ret['id'])
-    return ret
+    return decorate_customer(cust)
 
 
 def search_customer(first_name=None, last_name=None):  # noqa: E501
