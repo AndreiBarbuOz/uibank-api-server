@@ -116,7 +116,7 @@ class TestAccountsController(BaseTestCase):
         List all customer accounts
         """
         response = self.client.open(
-            '/customer/{customer_id}/accounts'.format(customer_id=789),
+            '/customer/{customer_id}/accounts'.format(customer_id=self.customer_id),
             headers=headers,
             method='GET')
         self.assert200(response,

@@ -94,4 +94,17 @@ def list_accounts(customer_id):  # noqa: E501
 
     :rtype: List[Account]
     """
-    return 'do some magic!'
+    try:
+        _id = ObjectId(customer_id)
+    except Exception:
+        return 'Not found', 404
+    cust = db['Customer'].find_one({"_id": _id})
+    if cust is None:
+        return 'Not found', 404
+
+    if 'accounts' in cust:
+        ret = [decorate_account(crt_account, customer_id) for crt_account in cust['accounts']]
+    else:
+        ret = []
+
+    return ret
