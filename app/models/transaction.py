@@ -14,15 +14,17 @@ class Transaction(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, date_time: datetime=None, amount: float=None, transaction_type: str=None, reference: str=None, description: str=None, balance: str=None, dispute: str=None, self_url: str=None, account_url: str=None):  # noqa: E501
+    def __init__(self, id: str=None, date_time: datetime=None, amount: float=None, account: str=None, transaction_type: str=None, reference: str=None, description: str=None, balance: str=None, dispute: str='in progress', self_url: str=None, account_url: str=None):  # noqa: E501
         """Transaction - a model defined in Swagger
 
         :param id: The id of this Transaction.  # noqa: E501
-        :type id: int
+        :type id: str
         :param date_time: The date_time of this Transaction.  # noqa: E501
         :type date_time: datetime
         :param amount: The amount of this Transaction.  # noqa: E501
         :type amount: float
+        :param account: The account of this Transaction.  # noqa: E501
+        :type account: str
         :param transaction_type: The transaction_type of this Transaction.  # noqa: E501
         :type transaction_type: str
         :param reference: The reference of this Transaction.  # noqa: E501
@@ -39,9 +41,10 @@ class Transaction(Model):
         :type account_url: str
         """
         self.swagger_types = {
-            'id': int,
+            'id': str,
             'date_time': datetime,
             'amount': float,
+            'account': str,
             'transaction_type': str,
             'reference': str,
             'description': str,
@@ -55,6 +58,7 @@ class Transaction(Model):
             'id': 'id',
             'date_time': 'date_time',
             'amount': 'amount',
+            'account': 'account',
             'transaction_type': 'transaction_type',
             'reference': 'reference',
             'description': 'description',
@@ -66,6 +70,7 @@ class Transaction(Model):
         self._id = id
         self._date_time = date_time
         self._amount = amount
+        self._account = account
         self._transaction_type = transaction_type
         self._reference = reference
         self._description = description
@@ -86,22 +91,22 @@ class Transaction(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
+    def id(self) -> str:
         """Gets the id of this Transaction.
 
 
         :return: The id of this Transaction.
-        :rtype: int
+        :rtype: str
         """
         return self._id
 
     @id.setter
-    def id(self, id: int):
+    def id(self, id: str):
         """Sets the id of this Transaction.
 
 
         :param id: The id of this Transaction.
-        :type id: int
+        :type id: str
         """
 
         self._id = id
@@ -151,6 +156,27 @@ class Transaction(Model):
             raise ValueError("Invalid value for `amount`, must not be `None`")  # noqa: E501
 
         self._amount = amount
+
+    @property
+    def account(self) -> str:
+        """Gets the account of this Transaction.
+
+
+        :return: The account of this Transaction.
+        :rtype: str
+        """
+        return self._account
+
+    @account.setter
+    def account(self, account: str):
+        """Sets the account of this Transaction.
+
+
+        :param account: The account of this Transaction.
+        :type account: str
+        """
+
+        self._account = account
 
     @property
     def transaction_type(self) -> str:
@@ -270,7 +296,7 @@ class Transaction(Model):
         :param dispute: The dispute of this Transaction.
         :type dispute: str
         """
-        allowed_values = ["no", "reported", "under investigation"]  # noqa: E501
+        allowed_values = ["in progress", "cleared", "reported", "under investigation"]  # noqa: E501
         if dispute not in allowed_values:
             raise ValueError(
                 "Invalid value for `dispute` ({0}), must be one of {1}"
