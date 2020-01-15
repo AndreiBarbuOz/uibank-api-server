@@ -78,7 +78,14 @@ class TestCustomersController(BaseTestCase):
 
         Get customer details
         """
-        customer_id = "5e1c2ddd5c79a0cb9880abbd"
+        body = RequestCustomer.from_dict(cust)
+        response = self.client.open(
+            '/customers',
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        customer_id = response.json['id']
         response = self.client.open(
             '/customers/{customer_id}'.format(customer_id=customer_id),
             headers=headers,

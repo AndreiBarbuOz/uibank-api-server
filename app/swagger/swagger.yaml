@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+  version: 1.0.1
 externalDocs:
   description: Find out more about UiBank
   url: https://github.com/AndreiBarbuOz/uibank-api-server
@@ -223,8 +223,7 @@ paths:
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       requestBody:
         description: List of user object
         content:
@@ -287,8 +286,7 @@ paths:
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "201":
           description: Updated
@@ -708,13 +706,12 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
         account_number:
           type: integer
           format: int64
         date_start:
-          type: integer
+          type: string
           format: date
         friendly_name:
           type: string
@@ -754,7 +751,7 @@ components:
       type: object
       properties:
         date_start:
-          type: integer
+          type: string
           format: date
         friendly_name:
           type: string

@@ -14,18 +14,18 @@ class RequestAccount(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, date_start: int=None, friendly_name: str=None, account_type: str=None):  # noqa: E501
+    def __init__(self, date_start: date=None, friendly_name: str=None, account_type: str=None):  # noqa: E501
         """RequestAccount - a model defined in Swagger
 
         :param date_start: The date_start of this RequestAccount.  # noqa: E501
-        :type date_start: int
+        :type date_start: date
         :param friendly_name: The friendly_name of this RequestAccount.  # noqa: E501
         :type friendly_name: str
         :param account_type: The account_type of this RequestAccount.  # noqa: E501
         :type account_type: str
         """
         self.swagger_types = {
-            'date_start': int,
+            'date_start': date,
             'friendly_name': str,
             'account_type': str
         }
@@ -51,22 +51,22 @@ class RequestAccount(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def date_start(self) -> int:
+    def date_start(self) -> date:
         """Gets the date_start of this RequestAccount.
 
 
         :return: The date_start of this RequestAccount.
-        :rtype: int
+        :rtype: date
         """
         return self._date_start
 
     @date_start.setter
-    def date_start(self, date_start: int):
+    def date_start(self, date_start: date):
         """Sets the date_start of this RequestAccount.
 
 
         :param date_start: The date_start of this RequestAccount.
-        :type date_start: int
+        :type date_start: date
         """
         if date_start is None:
             raise ValueError("Invalid value for `date_start`, must not be `None`")  # noqa: E501
