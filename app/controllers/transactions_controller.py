@@ -38,6 +38,7 @@ def add_transaction(account_id, body):  # noqa: E501
         return 'Not found', 404
     cust = db['Customer'].find_one({"accounts.id": _id})
     try:
+        # if no account was found, next will raise
         next(filter(lambda x: x["id"] == _id, cust['accounts']))
     except Exception:
         return "Not found", 404
@@ -50,8 +51,8 @@ def add_transaction(account_id, body):  # noqa: E501
     req['balance'] = float(0)
     req['dispute'] = 'in progress'
 
-    db["Customer"].update({"_id": cust['_id'], "first_name": cust['first_name'], "accounts.id": _id} , {
-                              "$push": {"accounts.$.transactions": req}})
+    db["Customer"].update_one({"_id": cust['_id'], "first_name": cust['first_name'], "accounts.id": _id}, {
+        "$push": {"accounts.$.transactions": req}})
     return decorate_transaction(req, account_id)
 
 
@@ -65,7 +66,24 @@ def get_transaction(transaction_id):  # noqa: E501
 
     :rtype: Transaction
     """
-    return 'do some magic!'
+    try:
+        _id = ObjectId(transaction_id)
+    except Exception:
+        return 'Not found', 404
+
+    cust = db['Customer'].find_one({"accounts": {"$elemMatch": {"transactions": {
+                                   "$elemMatch": {"id": _id}}}}})
+    try:
+        for crt_account in cust['accounts']:
+            if 'transactions' in crt_account:
+                for crt_transact in crt_account['transactions']:
+                    if crt_transact['id'] == _id:
+                        return decorate_transaction(crt_transact, str(crt_account['id']))
+    except Exception as ex:
+        print(ex)
+        return "not found", 404
+    return "not found", 404
+
 
 
 def list_transactions(account_id):  # noqa: E501
@@ -78,4 +96,19 @@ def list_transactions(account_id):  # noqa: E501
 
     :rtype: List[Transaction]
     """
-    return 'do some magic!'
+    try:
+        _id = ObjectId(account_id)
+    except Exception:
+        return 'Not found', 404
+    cust = db['Customer'].find_one({"accounts.id": _id})
+    try:
+        account = next(filter(lambda x: x["id"] == _id, cust['accounts']))
+    except Exception:
+        return "Not found", 404
+    ret = []
+    if 'transactions' in account:
+        for crt_transact in account['transactions']:
+            ret.append(decorate_transaction(crt_transact, str(account['id'])))
+
+    return ret
+

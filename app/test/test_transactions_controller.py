@@ -48,7 +48,8 @@ test_transact = {
     "account": "1001001234"
 }
 
-headers = {"Authorization" : "Bearer {0}".format(token)}
+headers = {"Authorization": "Bearer {0}".format(token)}
+
 
 class TestTransactionsController(BaseTestCase):
     """TransactionsController integration test stubs"""
@@ -74,7 +75,6 @@ class TestTransactionsController(BaseTestCase):
             headers=headers,
             method='DELETE')
 
-
     def test_add_transaction(self):
         """Test case for add_transaction
 
@@ -93,7 +93,8 @@ class TestTransactionsController(BaseTestCase):
 
         body = RequestTransaction.from_dict(test_transact)
         response = self.client.open(
-            '/accounts/{account_id}/transactions'.format(account_id=response.json['id']),
+            '/accounts/{account_id}/transactions'.format(
+                account_id=response.json['id']),
             method='POST',
             data=json.dumps(body),
             headers=headers,
@@ -107,25 +108,83 @@ class TestTransactionsController(BaseTestCase):
 
         Returns one transaction data
         """
+        body = RequestAccount.from_dict(test_account)
+        response = self.client.open(
+            '/customer/{customer_id}/accounts'.format(
+                customer_id=self.customer_id),
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        account_id = response.json['id']
+
+        body = RequestTransaction.from_dict(test_transact)
+        response = self.client.open(
+            '/accounts/{account_id}/transactions'.format(
+                account_id=account_id),
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
         response = self.client.open(
             '/transactions/{transaction_id}'.format(
-                transaction_id='transaction_id_example'),
+                transaction_id=response.json['id']),
             headers=headers,
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        self.compare_response(test_transact, response.json)
 
     def test_list_transactions(self):
         """Test case for list_transactions
 
         Return all transactions for an account
         """
+        body = RequestAccount.from_dict(test_account)
         response = self.client.open(
-            '/accounts/{account_id}/transactions'.format(account_id=789),
+            '/customer/{customer_id}/accounts'.format(
+                customer_id=self.customer_id),
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        account_id = response.json['id']
+
+        response = self.client.open(
+            '/accounts/{account_id}/transactions'.format(account_id=account_id),
             headers=headers,
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+        self.assertEqual(response.json, [])
+
+        body = RequestTransaction.from_dict(test_transact)
+        response = self.client.open(
+            '/accounts/{account_id}/transactions'.format(
+                account_id=account_id),
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+        response = self.client.open(
+            '/accounts/{account_id}/transactions'.format(account_id=account_id),
+            headers=headers,
+            method='GET')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assertEqual(len(response.json), 1)
+        self.compare_response(test_transact, response.json[0])
+
 
 
 if __name__ == '__main__':
