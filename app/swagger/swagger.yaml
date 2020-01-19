@@ -348,6 +348,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RequestTransaction'
+        required: true
       responses:
         "201":
           description: Created
@@ -774,8 +775,7 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
         date_time:
           type: string
           format: date-time
@@ -783,6 +783,10 @@ components:
         amount:
           type: number
           format: float
+          example: 163.1
+        account:
+          type: string
+          example: "1001001234"
         transaction_type:
           type: string
           description: Transaction type
@@ -801,8 +805,10 @@ components:
         dispute:
           type: string
           description: If transaction is under dispute
+          default: in progress
           enum:
-          - "no"
+          - in progress
+          - cleared
           - reported
           - under investigation
         self_url:
