@@ -10,43 +10,27 @@ from app.models.transaction import Transaction  # noqa: E501
 from app.models.request_customer import RequestCustomer  # noqa: E501
 from app.models.request_account import RequestAccount  # noqa: E501
 from app.test import BaseTestCase, token
+from faker import Faker
+import random
+import string
+from app.test.test_customers_controller import generate_customer
+from app.test.test_accounts_controller import generate_account
 
-test_cust = {
-    "first_name": "John",
-    "last_name": "Doe",
-    "middle_name": "string",
-    "title": "mr",
-    "gender": "male",
-    "email": "john.doe@uibank.com",
-    "date_of_birth": "2020-01-13",
-    "employment_status": "permanent",
-    "residence_status": "resident",
-    "addresses": [
-        {
-            "date_start": "2020-01-13",
-            "date_end": "2020-01-13",
-            "address1": "No 120 Spencer Street",
-            "address2": "Level 20",
-            "town": "Melbourne",
-            "state": "Victoria",
-            "postcode": "3000"
-        }
-    ],
-    "plain_password": "string"
-}
+fake = Faker()
 
-test_account = {
-    "date_start": "2020-01-13",
-    "friendly_name": "Debit account",
-    "account_type": "checking"
-}
 
-test_transact = {
-    "amount": 0,
-    "transaction_type": "debit",
-    "description": "return loan",
-    "account": "1001001234"
-}
+def generate_transaction():
+    return {
+        "amount": random.uniform(10, 1000),
+        "transaction_type": random.choice(["debit", "credit"]),
+        "description": fake.sentence(nb_words=5, variable_nb_words=True),
+        "account": ''.join([random.choice(string.digits) for n in range(10)])
+    }
+
+
+test_cust = generate_customer()
+test_account = generate_account()
+test_transact = generate_transaction()
 
 headers = {"Authorization": "Bearer {0}".format(token)}
 
@@ -158,7 +142,8 @@ class TestTransactionsController(BaseTestCase):
         account_id = response.json['id']
 
         response = self.client.open(
-            '/accounts/{account_id}/transactions'.format(account_id=account_id),
+            '/accounts/{account_id}/transactions'.format(
+                account_id=account_id),
             headers=headers,
             method='GET')
         self.assert200(response,
@@ -177,14 +162,14 @@ class TestTransactionsController(BaseTestCase):
                        'Response body is : ' + response.data.decode('utf-8'))
 
         response = self.client.open(
-            '/accounts/{account_id}/transactions'.format(account_id=account_id),
+            '/accounts/{account_id}/transactions'.format(
+                account_id=account_id),
             headers=headers,
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
         self.assertEqual(len(response.json), 1)
         self.compare_response(test_transact, response.json[0])
-
 
 
 if __name__ == '__main__':
