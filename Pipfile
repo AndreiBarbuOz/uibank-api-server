@@ -16,6 +16,7 @@ connexion = {extras = ["swagger-ui"],version = "*"}
 python-dateutil = "*"
 pymongo = "*"
 flask-pymongo = "*"
+pyjwt = "*"
 
 [requires]
 python_version = "3.8"

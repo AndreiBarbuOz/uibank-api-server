@@ -4,7 +4,7 @@ import six
 from app.models.auth import Auth  # noqa: E501
 from app.models.request_auth import RequestAuth  # noqa: E501
 from app import util
-
+import jwt
 
 def auth(body):  # noqa: E501
     """Authenticate endpoint
