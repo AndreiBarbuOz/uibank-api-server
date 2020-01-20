@@ -9,29 +9,35 @@ from app.models.account import Account  # noqa: E501
 from app.models.request_account import RequestAccount  # noqa: E501
 from app.models.request_customer import RequestCustomer  # noqa: E501
 from app.test import BaseTestCase, token
+from faker import Faker
+import random
+import string
+
+fake = Faker()
+
 
 headers = {"Authorization": "Bearer {0}".format(token)}
 
 test_account = {
-    "date_start": "2020-01-13",
-    "friendly_name": "Debit account",
-    "account_type": "checking"
+    "date_start": fake.date_this_decade(before_today=True, after_today=False).strftime('%Y-%m-%d'),
+    "friendly_name": fake.sentence(nb_words=5, variable_nb_words=True),
+    "account_type": random.choice(["checking", "savings"])
 }
 
 test_cust = {
-    "first_name": "John",
-    "last_name": "Doe",
+    "first_name": fake.first_name(),
+    "last_name": fake.last_name(),
     "middle_name": "string",
     "title": "mr",
     "gender": "male",
-    "email": "john.doe@uibank.com",
-    "date_of_birth": "2020-01-13",
+    "email": fake.email(),
+    "date_of_birth": fake.date_of_birth(minimum_age=20, maximum_age=50).strftime('%Y-%m-%d'),
     "employment_status": "permanent",
     "residence_status": "resident",
     "addresses": [
         {
-            "date_start": "2020-01-13",
-            "date_end": "2020-01-13",
+            "date_start": fake.date(pattern='%Y-%m-%d', end_datetime='-5y'),
+            "date_end": fake.date_between(start_date='-5y', end_date='today').strftime('%Y-%m-%d'),
             "address1": "No 120 Spencer Street",
             "address2": "Level 20",
             "town": "Melbourne",
@@ -39,7 +45,7 @@ test_cust = {
             "postcode": "3000"
         }
     ],
-    "plain_password": "string"
+    "plain_password": ''.join([random.choice(string.digits + string.ascii_letters) for i in range(10)])
 }
 
 
@@ -184,7 +190,6 @@ class TestAccountsController(BaseTestCase):
         self.assertEqual(len(response.json), 2)
         self.compare_response(test_account, response.json[0])
         self.compare_response(test_account, response.json[1])
-
 
 
 if __name__ == '__main__':

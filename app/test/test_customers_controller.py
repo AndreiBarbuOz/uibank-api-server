@@ -8,21 +8,27 @@ from six import BytesIO
 from app.models.customer import Customer  # noqa: E501
 from app.models.request_customer import RequestCustomer  # noqa: E501
 from app.test import BaseTestCase, token
+from faker import Faker
+import random
+import string
 
-cust = {
-    "first_name": "John",
-    "last_name": "Doe",
+fake = Faker()
+
+
+test_cust = {
+    "first_name": fake.first_name(),
+    "last_name": fake.last_name(),
     "middle_name": "string",
     "title": "mr",
     "gender": "male",
-    "email": "john.doe@uibank.com",
-    "date_of_birth": "2020-01-13",
+    "email": fake.email(),
+    "date_of_birth": fake.date_of_birth(minimum_age=20, maximum_age=50).strftime('%Y-%m-%d'),
     "employment_status": "permanent",
     "residence_status": "resident",
     "addresses": [
         {
-            "date_start": "2020-01-13",
-            "date_end": "2020-01-13",
+            "date_start": fake.date(pattern='%Y-%m-%d', end_datetime='-5y'),
+            "date_end": fake.date_between(start_date='-5y', end_date='today').strftime('%Y-%m-%d'),
             "address1": "No 120 Spencer Street",
             "address2": "Level 20",
             "town": "Melbourne",
@@ -30,7 +36,7 @@ cust = {
             "postcode": "3000"
         }
     ],
-    "plain_password": "string"
+    "plain_password": ''.join([random.choice(string.digits + string.ascii_letters) for i in range(10)])
 }
 
 headers = {"Authorization": "Bearer {0}".format(token)}
@@ -46,7 +52,7 @@ class TestCustomersController(BaseTestCase):
                 self.assertEqual(v, customer[k])
 
     def setUp(self):
-        body = RequestCustomer.from_dict(cust)
+        body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
             '/customers',
             method='POST',
@@ -66,7 +72,7 @@ class TestCustomersController(BaseTestCase):
 
         Add a new customer
         """
-        body = RequestCustomer.from_dict(cust)
+        body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
             '/customers',
             method='POST',
@@ -75,14 +81,14 @@ class TestCustomersController(BaseTestCase):
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
-        self.compare_response(cust, response.json)
+        self.compare_response(test_cust, response.json)
 
     def test_delete_customer(self):
         """Test case for delete_customer
 
         Delete a single customer
         """
-        body = RequestCustomer.from_dict(cust)
+        body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
             '/customers',
             method='POST',
@@ -108,7 +114,7 @@ class TestCustomersController(BaseTestCase):
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
-        self.compare_response(cust, response.json)
+        self.compare_response(test_cust, response.json)
 
     def test_search_customer(self):
         """Test case for search_customer
@@ -130,7 +136,7 @@ class TestCustomersController(BaseTestCase):
 
         Update an existing customer
         """
-        body = RequestCustomer.from_dict(cust)
+        body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
             '/customers/{customer_id}'.format(customer_id=789),
             method='PUT',
