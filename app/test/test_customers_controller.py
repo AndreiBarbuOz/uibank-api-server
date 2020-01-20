@@ -15,29 +15,33 @@ import string
 fake = Faker()
 
 
-test_cust = {
-    "first_name": fake.first_name(),
-    "last_name": fake.last_name(),
-    "middle_name": "string",
-    "title": "mr",
-    "gender": "male",
-    "email": fake.email(),
-    "date_of_birth": fake.date_of_birth(minimum_age=20, maximum_age=50).strftime('%Y-%m-%d'),
-    "employment_status": "permanent",
-    "residence_status": "resident",
-    "addresses": [
-        {
-            "date_start": fake.date(pattern='%Y-%m-%d', end_datetime='-5y'),
-            "date_end": fake.date_between(start_date='-5y', end_date='today').strftime('%Y-%m-%d'),
-            "address1": "No 120 Spencer Street",
-            "address2": "Level 20",
-            "town": "Melbourne",
-            "state": "Victoria",
-            "postcode": "3000"
-        }
-    ],
-    "plain_password": ''.join([random.choice(string.digits + string.ascii_letters) for i in range(10)])
-}
+def generate_customer():
+    return {
+        "first_name": fake.first_name(),
+        "last_name": fake.last_name(),
+        "middle_name": "string",
+        "title": "mr",
+        "gender": "male",
+        "email": fake.email(),
+        "date_of_birth": fake.date_of_birth(minimum_age=20, maximum_age=50).strftime('%Y-%m-%d'),
+        "employment_status": "permanent",
+        "residence_status": "resident",
+        "addresses": [
+            {
+                "date_start": fake.date(pattern='%Y-%m-%d', end_datetime='-5y'),
+                "date_end": fake.date_between(start_date='-5y', end_date='today').strftime('%Y-%m-%d'),
+                "address1": "No 120 Spencer Street",
+                "address2": "Level 20",
+                "town": "Melbourne",
+                "state": "Victoria",
+                "postcode": "3000"
+            }
+        ],
+        "plain_password": ''.join([random.choice(string.digits + string.ascii_letters) for i in range(10)])
+    }
+
+
+test_cust = generate_customer()
 
 headers = {"Authorization": "Bearer {0}".format(token)}
 
@@ -102,6 +106,13 @@ class TestCustomersController(BaseTestCase):
             method='DELETE')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
+
+        response = self.client.open(
+            '/customers/{customer_id}'.format(customer_id=cust_id),
+            headers=headers,
+            method='GET')
+        self.assert404(response, 'Response body is : ' +
+                       response.data.decode('utf-8'))
 
     def test_get_customer_details(self):
         """Test case for get_customer_details
