@@ -21,11 +21,7 @@ def generate_token(user_id, exp=None):
 
 
 def decode_token(token):
-    try:
-        return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-    except jwt.exceptions.InvalidTokenError as e:
-        print(e)
-        pass
+    return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
 
 
 def _current_timestamp() -> int:

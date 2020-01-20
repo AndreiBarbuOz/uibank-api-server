@@ -1,6 +1,7 @@
 import unittest
 from app import auth
 
+err_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1aWJhbmsuYXp1cmV3ZWJzaXRlcy5jb20iLCJleHAiOjE1ODAxMDIyODAsInN1YiI6IjEyMzQ1Njc4OTAifQ.uqVY6fh_QPM-ZOMWIWObdi1b6VvARJovYO2dF38sfa4'
 token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1aWJhbmsuYXp1cmV3ZWJzaXRlcy5jb20iLCJleHAiOjE1ODAxMDIyODAsInN1YiI6IjEyMzQ1Njc4OTAifQ.MJX5gZuBlYCkzhu6Itz32wv6-l1SzshE88UyEBvIM40'
 user_id = '1234567890'
 exp = 1580102280
@@ -21,6 +22,10 @@ class TestAuth(unittest.TestCase):
         self.assertIn('sub', t)
         self.assertEqual(t['sub'], user_id)
         pass
+
+    def test_decode_raise(self):
+        with self.assertRaises(Exception):
+            auth.decode_token(err_token)
 
 if __name__ == '__main__':
     import unittest

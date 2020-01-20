@@ -5,7 +5,7 @@ from flask_testing import TestCase
 
 from app.encoder import JSONEncoder
 
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ1aWJhbmsuYXp1cmV3ZWJzaXRlcy5jb20iLCJleHAiOjE1ODAxMDIyODAsInN1YiI6IjEyMzQ1Njc4OTAifQ.MJX5gZuBlYCkzhu6Itz32wv6-l1SzshE88UyEBvIM40"
 
 
 class BaseTestCase(TestCase):
