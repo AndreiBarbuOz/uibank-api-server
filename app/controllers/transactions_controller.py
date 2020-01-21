@@ -8,8 +8,8 @@ import string
 
 from app.models.request_transaction import RequestTransaction  # noqa: E501
 from app.models.transaction import Transaction  # noqa: E501
-from app import util
-from app import db
+from app import util, get_db
+from connexion.apps.flask_app import flask
 
 
 def decorate_transaction(transaction, account_id):
@@ -32,6 +32,8 @@ def add_transaction(account_id, body):  # noqa: E501
 
     :rtype: None
     """
+    db = get_db()
+
     try:
         _id = ObjectId(account_id)
     except Exception:
@@ -66,6 +68,8 @@ def get_transaction(transaction_id):  # noqa: E501
 
     :rtype: Transaction
     """
+    db = get_db()
+
     try:
         _id = ObjectId(transaction_id)
     except Exception:
@@ -96,6 +100,8 @@ def list_transactions(account_id):  # noqa: E501
 
     :rtype: List[Transaction]
     """
+    db = get_db()
+
     try:
         _id = ObjectId(account_id)
     except Exception:

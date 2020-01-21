@@ -4,8 +4,8 @@ from bson.objectid import ObjectId
 
 from app.models.request_user import RequestUser  # noqa: E501
 from app.models.user import User  # noqa: E501
-from app import util
-from app import db
+from app import util, get_db
+from connexion.apps.flask_app import flask
 
 def add_user(body):  # noqa: E501
     """Add a new admin user
@@ -17,6 +17,8 @@ def add_user(body):  # noqa: E501
 
     :rtype: User
     """
+    db = get_db()
+
     req = RequestUser.from_dict(body).to_dict()  # noqa: E501
     req["email_canonical"] = req["email"].lower()
     req["username_canonical"] = req["username"].lower()
@@ -36,6 +38,7 @@ def get_user(user_id):  # noqa: E501
 
     :rtype: User
     """
+    db = get_db()
     try:
         _id = ObjectId(user_id)
     except Exception:

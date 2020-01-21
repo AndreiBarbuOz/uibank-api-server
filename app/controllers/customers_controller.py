@@ -4,9 +4,9 @@ from bson.objectid import ObjectId
 
 from app.models.customer import Customer  # noqa: E501
 from app.models.request_customer import RequestCustomer  # noqa: E501
-from app import util
-from app import db
+from app import util, get_db
 from datetime import date, datetime
+from connexion.apps.flask_app import flask
 
 
 def decorate_customer(customer): 
@@ -35,6 +35,7 @@ def add_customer(body):  # noqa: E501
 
     :rtype: Customer
     """
+    db = get_db()
     req = RequestCustomer.from_dict(body).to_dict()  # noqa: E501
     req["email_verified"] = False
     req['date_of_birth'] = datetime.combine(req['date_of_birth'], datetime.min.time())
@@ -57,6 +58,8 @@ def delete_customer(customer_id):  # noqa: E501
 
     :rtype: None
     """
+    db = get_db()
+
     try:
         _id = ObjectId(customer_id)
     except Exception:
@@ -81,6 +84,8 @@ def get_customer_details(customer_id):  # noqa: E501
 
     :rtype: Customer
     """
+    db = get_db()
+
     try:
         _id = ObjectId(customer_id)
     except Exception:
@@ -104,6 +109,8 @@ def search_customer(first_name=None, last_name=None):  # noqa: E501
 
     :rtype: List[Customer]
     """
+    db = get_db()
+
     cust_list = db['Customer'].find({"first_name": first_name, "last_name": last_name})
     if cust_list is None:
         return 'Not found', 404
