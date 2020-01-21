@@ -8,7 +8,7 @@ from six import BytesIO
 from app.models.account import Account  # noqa: E501
 from app.models.request_account import RequestAccount  # noqa: E501
 from app.models.request_customer import RequestCustomer  # noqa: E501
-from app.test import BaseTestCase, token
+from app.test import BaseTestCase, token, err_token
 from faker import Faker
 import random
 import string
@@ -17,7 +17,6 @@ from app.test.test_customers_controller import generate_customer
 
 fake = Faker()
 
-
 def generate_account():
     return {
         "date_start": fake.date_this_decade(before_today=True, after_today=False).strftime('%Y-%m-%d'),
@@ -25,10 +24,7 @@ def generate_account():
         "account_type": random.choice(["checking", "savings"])
     }
 
-
-
 headers = {"Authorization": "Bearer {0}".format(token)}
-
 
 class TestAccountsController(BaseTestCase):
     """AccountsController integration test stubs"""

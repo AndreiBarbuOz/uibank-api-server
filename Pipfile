@@ -17,6 +17,7 @@ python-dateutil = "*"
 pymongo = "*"
 flask-pymongo = "*"
 pyjwt = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.8"

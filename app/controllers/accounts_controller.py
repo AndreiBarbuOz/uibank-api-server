@@ -7,8 +7,8 @@ import string
 
 from app.models.account import Account  # noqa: E501
 from app.models.request_account import RequestAccount  # noqa: E501
-from app import util
-from app import db
+from app import util, get_db
+from connexion.apps.flask_app import flask
 
 def decorate_account(account, customer_id): 
     account['date_start'] = str(account['date_start'].date())
@@ -30,6 +30,8 @@ def create_account(body, customer_id):  # noqa: E501
 
     :rtype: Account
     """
+    db = get_db()
+
     try:
         _id = ObjectId(customer_id)
     except Exception:
@@ -71,6 +73,8 @@ def get_account(account_id):  # noqa: E501
 
     :rtype: Account
     """
+    db = get_db()
+
     try:
         _id = ObjectId(account_id)
     except Exception:
@@ -94,6 +98,8 @@ def list_accounts(customer_id):  # noqa: E501
 
     :rtype: List[Account]
     """
+    db = get_db()
+
     try:
         _id = ObjectId(customer_id)
     except Exception:

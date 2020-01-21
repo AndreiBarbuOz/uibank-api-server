@@ -41,7 +41,6 @@ def generate_customer():
     }
 
 
-test_cust = generate_customer()
 
 headers = {"Authorization": "Bearer {0}".format(token)}
 
@@ -56,6 +55,7 @@ class TestCustomersController(BaseTestCase):
                 self.assertEqual(v, customer[k])
 
     def setUp(self):
+        test_cust = generate_customer()
         body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
             '/customers',
@@ -76,6 +76,7 @@ class TestCustomersController(BaseTestCase):
 
         Add a new customer
         """
+        test_cust = generate_customer()
         body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
             '/customers',
@@ -92,6 +93,7 @@ class TestCustomersController(BaseTestCase):
 
         Delete a single customer
         """
+        test_cust = generate_customer()
         body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
             '/customers',
@@ -119,8 +121,20 @@ class TestCustomersController(BaseTestCase):
 
         Get customer details
         """
+        test_cust = generate_customer()
+        body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
-            '/customers/{customer_id}'.format(customer_id=self.customer_id),
+            '/customers',
+            method='POST',
+            data=json.dumps(body),
+            headers=headers,
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+        cust_id = response.json['id']
+
+        response = self.client.open(
+            '/customers/{customer_id}'.format(customer_id=cust_id),
             headers=headers,
             method='GET')
         self.assert200(response,
@@ -147,6 +161,7 @@ class TestCustomersController(BaseTestCase):
 
         Update an existing customer
         """
+        test_cust = generate_customer()
         body = RequestCustomer.from_dict(test_cust)
         response = self.client.open(
             '/customers/{customer_id}'.format(customer_id=789),
