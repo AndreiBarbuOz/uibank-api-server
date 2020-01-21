@@ -15,9 +15,13 @@ class User(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: str=None, username: str=None, username_canonical: str=None, email: str=None, email_canonical: str=None, self_url: str=None):  # noqa: E501
+    def __init__(self, first_name: str=None, last_name: str=None, id: str=None, username: str=None, username_canonical: str=None, email: str=None, email_canonical: str=None, self_url: str=None):  # noqa: E501
         """User - a model defined in Swagger
 
+        :param first_name: The first_name of this User.  # noqa: E501
+        :type first_name: str
+        :param last_name: The last_name of this User.  # noqa: E501
+        :type last_name: str
         :param id: The id of this User.  # noqa: E501
         :type id: str
         :param username: The username of this User.  # noqa: E501
@@ -32,6 +36,8 @@ class User(Model):
         :type self_url: str
         """
         self.swagger_types = {
+            'first_name': str,
+            'last_name': str,
             'id': str,
             'username': str,
             'username_canonical': str,
@@ -41,6 +47,8 @@ class User(Model):
         }
 
         self.attribute_map = {
+            'first_name': 'first_name',
+            'last_name': 'last_name',
             'id': 'id',
             'username': 'username',
             'username_canonical': 'username_canonical',
@@ -48,6 +56,8 @@ class User(Model):
             'email_canonical': 'email_canonical',
             'self_url': 'self_url'
         }
+        self._first_name = first_name
+        self._last_name = last_name
         self._id = id
         self._username = username
         self._username_canonical = username_canonical
@@ -65,6 +75,48 @@ class User(Model):
         :rtype: User
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def first_name(self) -> str:
+        """Gets the first_name of this User.
+
+
+        :return: The first_name of this User.
+        :rtype: str
+        """
+        return self._first_name
+
+    @first_name.setter
+    def first_name(self, first_name: str):
+        """Sets the first_name of this User.
+
+
+        :param first_name: The first_name of this User.
+        :type first_name: str
+        """
+
+        self._first_name = first_name
+
+    @property
+    def last_name(self) -> str:
+        """Gets the last_name of this User.
+
+
+        :return: The last_name of this User.
+        :rtype: str
+        """
+        return self._last_name
+
+    @last_name.setter
+    def last_name(self, last_name: str):
+        """Sets the last_name of this User.
+
+
+        :param last_name: The last_name of this User.
+        :type last_name: str
+        """
+
+        self._last_name = last_name
 
     @property
     def id(self) -> str:

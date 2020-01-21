@@ -549,6 +549,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Auth'
+        "401":
+          description: Auth failed
       security: []
       x-openapi-router-controller: app.controllers.auth_controller
 components:
@@ -931,6 +933,12 @@ components:
       - username
       type: object
       properties:
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
         id:
           type: string
           example: 5e1c08d7116ec41f15ba94af
@@ -963,10 +971,18 @@ components:
       - email
       - plain_password
       - username
+      - first_name
+      - last_name
       type: object
       properties:
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
         username:
-          pattern: '[a-zA-Z][a-zA-Z0-9_-]{6,50}'
+          pattern: '[a-zA-Z][a-zA-Z0-9_-]{3,50}'
           type: string
           example: admin123
         plain_password:
@@ -977,12 +993,6 @@ components:
           type: string
           format: email
           example: admin@uibank.com
-        first_name:
-          type: string
-          example: John
-        last_name:
-          type: string
-          example: Admin
     Auth:
       type: object
       properties:
@@ -1020,4 +1030,3 @@ components:
       scheme: bearer
       bearerFormat: JWT
       x-bearerInfoFunc: app.controllers.authorization_controller.check_bearerAuth
-

@@ -15,40 +15,40 @@ class RequestUser(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, username: str=None, plain_password: str=None, email: str=None, first_name: str=None, last_name: str=None):  # noqa: E501
+    def __init__(self, first_name: str=None, last_name: str=None, username: str=None, plain_password: str=None, email: str=None):  # noqa: E501
         """RequestUser - a model defined in Swagger
 
+        :param first_name: The first_name of this RequestUser.  # noqa: E501
+        :type first_name: str
+        :param last_name: The last_name of this RequestUser.  # noqa: E501
+        :type last_name: str
         :param username: The username of this RequestUser.  # noqa: E501
         :type username: str
         :param plain_password: The plain_password of this RequestUser.  # noqa: E501
         :type plain_password: str
         :param email: The email of this RequestUser.  # noqa: E501
         :type email: str
-        :param first_name: The first_name of this RequestUser.  # noqa: E501
-        :type first_name: str
-        :param last_name: The last_name of this RequestUser.  # noqa: E501
-        :type last_name: str
         """
         self.swagger_types = {
+            'first_name': str,
+            'last_name': str,
             'username': str,
             'plain_password': str,
-            'email': str,
-            'first_name': str,
-            'last_name': str
+            'email': str
         }
 
         self.attribute_map = {
+            'first_name': 'first_name',
+            'last_name': 'last_name',
             'username': 'username',
             'plain_password': 'plain_password',
-            'email': 'email',
-            'first_name': 'first_name',
-            'last_name': 'last_name'
+            'email': 'email'
         }
+        self._first_name = first_name
+        self._last_name = last_name
         self._username = username
         self._plain_password = plain_password
         self._email = email
-        self._first_name = first_name
-        self._last_name = last_name
 
     @classmethod
     def from_dict(cls, dikt) -> 'RequestUser':
@@ -60,6 +60,52 @@ class RequestUser(Model):
         :rtype: RequestUser
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def first_name(self) -> str:
+        """Gets the first_name of this RequestUser.
+
+
+        :return: The first_name of this RequestUser.
+        :rtype: str
+        """
+        return self._first_name
+
+    @first_name.setter
+    def first_name(self, first_name: str):
+        """Sets the first_name of this RequestUser.
+
+
+        :param first_name: The first_name of this RequestUser.
+        :type first_name: str
+        """
+        if first_name is None:
+            raise ValueError("Invalid value for `first_name`, must not be `None`")  # noqa: E501
+
+        self._first_name = first_name
+
+    @property
+    def last_name(self) -> str:
+        """Gets the last_name of this RequestUser.
+
+
+        :return: The last_name of this RequestUser.
+        :rtype: str
+        """
+        return self._last_name
+
+    @last_name.setter
+    def last_name(self, last_name: str):
+        """Sets the last_name of this RequestUser.
+
+
+        :param last_name: The last_name of this RequestUser.
+        :type last_name: str
+        """
+        if last_name is None:
+            raise ValueError("Invalid value for `last_name`, must not be `None`")  # noqa: E501
+
+        self._last_name = last_name
 
     @property
     def username(self) -> str:
@@ -129,45 +175,3 @@ class RequestUser(Model):
             raise ValueError("Invalid value for `email`, must not be `None`")  # noqa: E501
 
         self._email = email
-
-    @property
-    def first_name(self) -> str:
-        """Gets the first_name of this RequestUser.
-
-
-        :return: The first_name of this RequestUser.
-        :rtype: str
-        """
-        return self._first_name
-
-    @first_name.setter
-    def first_name(self, first_name: str):
-        """Sets the first_name of this RequestUser.
-
-
-        :param first_name: The first_name of this RequestUser.
-        :type first_name: str
-        """
-
-        self._first_name = first_name
-
-    @property
-    def last_name(self) -> str:
-        """Gets the last_name of this RequestUser.
-
-
-        :return: The last_name of this RequestUser.
-        :rtype: str
-        """
-        return self._last_name
-
-    @last_name.setter
-    def last_name(self, last_name: str):
-        """Sets the last_name of this RequestUser.
-
-
-        :param last_name: The last_name of this RequestUser.
-        :type last_name: str
-        """
-
-        self._last_name = last_name
