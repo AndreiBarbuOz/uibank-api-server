@@ -5,8 +5,6 @@ from app import encoder
 from app import config
 import logging
 
-from flask_testing import TestCase
-
 from app.encoder import JSONEncoder
 from connexion.apps.flask_app import flask
 
